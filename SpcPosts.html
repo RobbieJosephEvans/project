@@ -1,0 +1,86 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
+    </head>
+    <body>
+        <ul id="slide-out" class="sidenav">
+    <li><div class="user-view">
+      <div class="background">
+        <!-- <img src="images/office.jpg">
+      </div>
+      <a href="#user"><img class="circle" src="images/yuna.jpg"></a> -->
+      <a href="#name"><span class="white-text name">John Doe</span></a>
+      <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
+    </div></li>
+    <li><a href="mission.html">Our Mission</a></li>
+    <li><a href="posts.html">Posts</a></li>
+    <li><a href="additionalinfo.html">Additional Information</a></li>
+    <li><a href="chats.html">Chats</a></li>
+    <li><div class="divider"></div></li>
+    <li><a class="subheader">Profile</a></li>
+    <li><a class="waves-effect" href="profilepage.html">Your Account</a></li>
+  </ul>
+  <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">Activate Sidenav</i></a>
+        <div id="posts"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems, {
+                inDuration:800,
+                outDuration:800
+            });
+        });
+        
+        let userid;
+         var firebaseConfig = {
+            apiKey: "AIzaSyD-3h6lfab3mP5Qdhy5ser3wUdH8k7fF7U",
+            authDomain: "project1-d5434.firebaseapp.com",
+            databaseURL: "https://project1-d5434.firebaseio.com",
+            projectId: "project1-d5434",
+            storageBucket: "project1-d5434.appspot.com",
+            messagingSenderId: "1035093859939",
+            appId: "1:1035093859939:web:637ed330927bad29236256",
+            measurementId: "G-99E92MZGPG"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+        const db = firebase.firestore();
+        firebase.auth().onAuthStateChanged((user)=> {
+          if (user) {
+                // User is signed in.
+        //        let email = user.email;
+        //        let emailVerified = user.emailVerified;
+              userid = user.uid;
+        //        let providerData = user.providerData;
+              console.log(userid)
+              seeposts()
+              
+          } else {
+              console.log('not signed in')
+                // User is signed out.
+          }
+        });
+    
+        function seeposts(){
+            var string='';
+            var getData=window.localStorage.getItem("HomeName");
+            console.log(getData)
+            db.collection("Posts").doc(getData).collection("s").get().then((dataget)=>{
+                dataget.forEach((doc)=>{
+                    string=string+"<div class='card blue-grey lighten-2'><div class='card-content white-text'><span class='card-title' >The Dunfield Retirement Residence</span><p>"+doc.data()['name']+". Age "+doc.data()['age']+". "+doc.data()['interests']+".</p></div><div class='card-action'><a href='#'>Connect</a></div></div>"
+                })
+            }).then(()=>{
+                document.getElementById("posts").innerHTML=string;
+            })
+        }
+    </script>
+        
+        
+    </body>
+</html>

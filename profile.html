@@ -1,0 +1,85 @@
+<html>
+    <head>
+        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <style>
+            input{
+                margin-left: 10px;
+            }
+        </style>
+        
+    </head>
+
+    <body>
+        
+        <h1>Set up your profile</h1>
+        <input type="text" id="Firstname" placeholder="First name">
+        <input type="text" id="LastName" placeholder="Last name">
+        <input type="text" id="Age" placeholder="20">
+        <input type="text" id="Address" placeholder="46 Street Avenue">
+        
+        <br>
+        <textarea id='Description' placeholder="Other info you want people to know"></textarea>
+        <br>
+        <button onclick="setprofile()">Continue</button>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
+        <script>
+            let userid;
+             var firebaseConfig = {
+                apiKey: "AIzaSyD-3h6lfab3mP5Qdhy5ser3wUdH8k7fF7U",
+                authDomain: "project1-d5434.firebaseapp.com",
+                databaseURL: "https://project1-d5434.firebaseio.com",
+                projectId: "project1-d5434",
+                storageBucket: "project1-d5434.appspot.com",
+                messagingSenderId: "1035093859939",
+                appId: "1:1035093859939:web:637ed330927bad29236256",
+                measurementId: "G-99E92MZGPG"
+            };
+            // Initialize Firebase
+            firebase.initializeApp(firebaseConfig);
+            firebase.analytics();
+            const db = firebase.firestore();
+            let FirstName = document.getElementById("Firstname");
+            let LastName = document.getElementById("LastName");
+            let Age = document.getElementById("Age");
+            let Address = document.getElementById("Address");
+            let descrip = document.getElementById("Description");
+            
+            firebase.auth().onAuthStateChanged((user)=> {
+              if (user) {
+                    // User is signed in.
+            //        let email = user.email;
+            //        let emailVerified = user.emailVerified;
+                  userid = user.uid;
+            //        let providerData = user.providerData;
+                  console.log(userid)
+              } else {
+                  console.log('not signed in')
+                    // User is signed out.
+              }
+            });
+
+            function setprofile(){
+                console.log(userid)
+                db.collection("users").doc(userid).collection("profile").doc("info").set({
+                    first: FirstName.value,
+                    last: LastName.value,
+                    age:Age.value, 
+                    address:Address.value,
+                    descrip:Description.value
+                
+                    }).then(()=>{
+                        window.open("seniorhomeselect.html")
+                    })
+                .catch((error)=> {
+                    console.error("Error adding document: ", error);
+                });
+            }
+            
+        </script>
+        
+    </body>
+</html>
