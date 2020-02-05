@@ -24,6 +24,7 @@
     <li><div class="divider"></div></li>
     <li><a class="subheader">Profile</a></li>
     <li><a class="waves-effect" href="profilepage.html">Your Account</a></li>
+    <li><a onclick="signOut()">Log Out</a></li>
   </ul>
   <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">Activate Sidenav</i></a>
         <div>
@@ -31,6 +32,7 @@
         <p id='birthd'></p>
         <p id='live'></p>
         <p id='description'></p>
+        <p id="email"></p>
         </div>
         <button onclick="changep()">Edit Profile</button>
         <button onclick="changes()">Change Senior Homes</button>
@@ -57,32 +59,37 @@
             firebase.initializeApp(firebaseConfig);
             firebase.analytics();
             const db = firebase.firestore();
-            
+        
             firebase.auth().onAuthStateChanged((user)=> {
               if (user) {
                     // User is signed in.
-            //        let email = user.email;
+                    let useremail = user.email;
+                    console.log(useremail)
             //        let emailVerified = user.emailVerified;
                   userid = user.uid;
             //        let providerData = user.providerData;
                   console.log(userid)
-                  getData();
+                  getData(useremail);
               } else {
                   console.log('not signed in')
                     // User is signed out.
               }
             });
     
-            function getData(){
-            console.log(userid)
-            db.collection("users").doc(userid).collection("profile").doc("info").get().then((dataget1)=>{
-                dataget=dataget1.data()
-                document.getElementById("name").innerHTML=dataget['first']+" "+dataget['last'];
-                document.getElementById("birthd").innerHTML=dataget['age'];
-                document.getElementById("live").innerHTML=dataget['address'];
-                document.getElementById("description").innerHTML=dataget['descrip'];
-            });
-        }
+            function getData(useremail){
+                console.log(userid)
+                console.log(useremail)
+                db.collection("users").doc(userid).collection("profile").doc("info").get().then((dataget1)=>{
+                    dataget=dataget1.data()
+                    document.getElementById("name").innerHTML=dataget['first']+" "+dataget['last'];
+                    document.getElementById("birthd").innerHTML=dataget['age'];
+                    document.getElementById("live").innerHTML=dataget['address'];
+                    document.getElementById("description").innerHTML=dataget['descrip'];
+
+                });
+                document.getElementById("email").innerHTML=useremail;
+            }
+        
         function changep(){
             window.open("profilechange.html","_parent")
         }
