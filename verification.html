@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <style>
+            #stuff{
+                padding-top: 100px;
+                margin:auto;
+                text-align: center;
+            }
+            #buttons{
+                padding-top: 20px;
+            }
+        </style>
+    </head>
+        <body>
+            <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
+            <script src="Retirement_Homes_WGS84.geojson"></script>
+            <div id="stuff">
+                <button onclick='verify()' class="waves-effect waves-light btn-large">Send Verification</button>
+                <p style="padding-top:20px;">Refresh once verified to continue</p>
+                <div id="buttons"></div>
+            </div>
+            <script>
+            
+                var firebaseConfig = {
+                    apiKey: "AIzaSyD-3h6lfab3mP5Qdhy5ser3wUdH8k7fF7U",
+                    authDomain: "project1-d5434.firebaseapp.com",
+                    databaseURL: "https://project1-d5434.firebaseio.com",
+                    projectId: "project1-d5434",
+                    storageBucket: "project1-d5434.appspot.com",
+                    messagingSenderId: "1035093859939",
+                    appId: "1:1035093859939:web:637ed330927bad29236256",
+                    measurementId: "G-99E92MZGPG"
+                };
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+                firebase.analytics();
+                const db = firebase.firestore();
+                
+                let emailVerified;
+                
+                firebase.auth().onAuthStateChanged((user)=> {
+                    if (user) {
+                            // User is signed in.
+                        let email = user.email;
+                        let emailVerified = user.emailVerified;
+                        let userid = user.uid;
+                        console.log(emailVerified)
+                    //        let providerData = user.providerData;
+                        console.log(userid)
+                        write(emailVerified)
+                        
+                    } else {
+                        console.log('not signed in')
+                            // User is signed out.
+                    }
+                });
+            
+                
+                function verify(){
+                    var user = firebase.auth().currentUser;
+
+                    user.sendEmailVerification().then(function() {
+                    // Email sent.
+                    }).catch(function(error) {
+                    // An error happened.
+                    });
+                }
+                function done(){
+                    window.open("index.html", "_parent")
+                }
+                function write(emailVerified){
+                    console.log(emailVerified)
+                    if(emailVerified==true){
+                        document.getElementById("buttons").innerHTML="<button onclick='done()' class='waves-effect waves-light btn-large'>Continue</button>";
+                    }
+                }
+        </script>
+    </body>
+</html>
