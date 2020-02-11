@@ -1,32 +1,200 @@
 <html>
-    <head>
+    <head> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="mystyle.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
         
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    </head>
+
         <style>
             input{
                 margin-left: 10px;
             }
-        </style>
-        
-    </head>
+            .active {
+              background-color: #717171;
+            }
 
-    <body>
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background-color: #333;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+
+              }
+
+              li {
+                float: left;
+              }
+
+              li a {
+                display: block;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+              }
+
+              li a:hover {
+                background-color: #111;
+              /*start of collapsible */
+              }
+              .collapsible {
+                background-color: #8860d0;
+                color: white;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 15px;
+              }
+
+              .active, .collapsible:hover {
+                background-color: #555;
+              }
+
+              .collapsible:after {
+                content: '\002B';
+            
+                color: white;
+                font-weight: bold;
+                float: right;
+                margin-left: 5px;
+              }
+
+              .active:after {
+                content: "\2212";
+                
+              }
+
+              .content {
+                padding: 0 18px;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.2s ease-out;
+                background-color: #f1f1f1;
+              }
+
+              .content:after {
+
+                background-color: #8860d0;
+              }
+
+              .collabsible active {
+
+                background-color: #8860d0;
+              }
+
+              button:focus {
+
+                background-color: #8860d0;
+              }
+              .buttons{
+
+                  font-size: 010px;
+                  justify-content: space-around;
+
+              }
+
+              .changeLook:hover {
+                  cursor: pointer;
+                  background-color:;
+
+              }
+
+              .selections {
+                  
+                  padding: 4px;
+                  float: left;
+                  padding: 10px;
+                  background-color: grey;
+                  margin: 5px;
+                  color: black;
+                  justify-content: space-evenly;
+              }
+
+              .space-even {
+                  justify-content: space-evenly;
+
+              }
+
+              .active:after {
+                              content: "";
+                              
+                            }
+
+              /* end of collapsible */
+        </style>
+
+
+        <body style="font-family: Lucida Console; background-image: linear-gradient(to bottom right, white);">
+
+         <!-- navbar start --> 
+
+        <ul class="">
+          <!--<li><img src="interGenLogo.jpg" style="height:50%"></li> -->
+          <div class="container">
+            <!-- <a src="interGenLogo.jpg" style="position: absolute;margin-top: 0px;"></a> -->
+            <li><a class="active" href="index.html">InterGen</a></li>
+            <li><a href="index.html">Our Mission</a></li>
+            <!-- <li><a href="posts.html">Posts</a></li> -->
+            <li><a href="index.html">Log In / Sign Up</a></li>
+            <li><a href="index.html">More Information</a></li>
+          </div>
+        </ul>
+
+        <!-- navbar end -->
+
+
+        <div class="container">
         
-        <h1>Set up your profile</h1>
-        <input type="text" id="Firstname" placeholder="First name">
-        <input type="text" id="LastName" placeholder="Last name">
-        <input type="text" id="Age" placeholder="20">
+        <h1>Set Up Your Profile</h1>
+        <h6><b>First Name:</h6>
+        <input type="text" id="Firstname" placeholder="John" style="color: black;">
+        <h6><b>Last Name:</h6>
+        <input type="text" id="LastName" placeholder="Smith">
+        <h6><b>Age:</h6>
+        <input type="number" id="Age" placeholder="20">
+        <h6><b>Address:</h6>
         <input type="text" id="Address" placeholder="46 Street Avenue">
-        
+        <h6><b>Additional Information:</h6>
         <br>
-        <textarea id='Description' placeholder="Other info you want people to know"></textarea>
+        <textarea id='Description' placeholder="I'm allergic to nuts - let me know if anything we're eating may contain or has nuts when volunteering. Thanks!" style="padding-bottom: 0px;"></textarea>
         <br>
-        <button onclick="setprofile()">Continue</button>
+        <br>
+        <!--<button onclick="setprofile()" style="background-color:#8860d0" class="waves-effect waves-light btn">Continue</button> -->
+
+        <!--collapsible start -->
+        <button class="collapsible" id="collapse" href="#SelectHomes">Continue</button>
+        <div class="content" id="SelectHomes">
+            <h5>Select Senior Homes Near You (minimum of 5):</h5>
+          <div class="changeLook" id="buttons" style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+          </div>
+          <button onclick="sethomes()" style="background-color:#8860d0;align-content: center;" class="waves-effect waves-light btn">Advance</button>
+          <br>
+          <br>
+        </div>
+        <!--collapsible end -->
+
+
+<!-- script -->
+        <script src="Retirement_Homes_WGS84.geojson"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-analytics.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-firestore.js"></script>
         <script src="https://www.gstatic.com/firebasejs/7.2.2/firebase-auth.js"></script>
         <script>
+
             let userid;
              var firebaseConfig = {
                 apiKey: "AIzaSyD-3h6lfab3mP5Qdhy5ser3wUdH8k7fF7U",
@@ -72,11 +240,100 @@
                     descrip:Description.value
                 
                     }).then(()=>{
-                        window.open("seniorhomeselect.html")
+                        window.open("seniorhomeselect.html","_parent")
                     })
                 .catch((error)=> {
                     console.error("Error adding document: ", error);
                 });
+            }
+
+            //collapsible start
+            var coll = document.getElementsByClassName("collapsible");
+            var i;
+
+            for (i = 0; i < coll.length; i++) {
+              coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight){
+                  content.style.maxHeight = null;
+                } else {
+                  content.style.maxHeight = content.scrollHeight + "px";
+                  //content.style.background-color = "#8860d0"
+
+                } 
+              });
+            }
+            //collapsible end
+
+            //seniorhomeselect start
+            var residentialhome = [];
+            for(i=0;i<data.length;i++){
+                var strings=data[0]["features"][i]["properties"]["NAME"];
+                residentialhome.push({
+                    name:strings,
+                    value:false
+                })
+            }
+            residentialhome.shift()
+            console.log(residentialhome)
+            var string="";
+            for(i=0;i<data[0]["features"].length;i++){
+                string=string + "<a class='selections' style='justify-content: space-evenly;' id="+"'"+data[0]['features'][i]['properties']['NAME']+"'"+ " onclick=changecolour(data[0]['features']["+i+"]['properties']['NAME']) style=';'>"+data[0]["features"][i]["properties"]["NAME"]+"<br>"+data[0]["features"][i]["properties"]["ADDRESS"]+"</a>"
+
+
+                ;
+                
+            }
+            document.getElementById("buttons").innerHTML=string;
+            
+            for(i=0;i<data[0]["features"].length;i++){
+                var strings=data[0]["features"][i]["properties"]["NAME"];
+                residentialhome.push({
+                    name:strings,
+                    value:false
+                })
+            }
+            function changecolour(info){
+                console.log(info)
+                for(i=0;i<data[0]["features"].length;i++){
+                    if(info==residentialhome[i]['name']){
+                        if(residentialhome[i]['value']==false){
+                            residentialhome[i]['value']=true;
+                            document.getElementById(data[0]['features'][i]['properties']['NAME']).style.background="#8860d0";
+                        } else if(residentialhome[i]['value']==true){
+                            residentialhome[i]['value']=false;
+                            document.getElementById(data[0]['features'][i]['properties']['NAME']).style.background="#808080";
+                        }
+                        
+                    }
+                }
+            }
+            function sethomes(){
+                var count=0;
+                var list=[];
+                for(i=0;i<residentialhome.length;i++){
+                        if(residentialhome[i]["value"]==true){
+                            count=count+1
+                            list.push(residentialhome[i]["name"])
+                        }
+                    }
+                if(count<5){
+
+                    console.log("select more senior homes")
+                    alert(`Error - Ensure You've Selected At Least 5 Options`);
+
+
+                }else{
+                    for(i=0;i<list.length;i++){
+                        db.collection("users").doc(userid).collection("Senior Homes").add({
+                            home:list[i]
+                        })
+                    }
+                        window.open("posts.html","_parent")
+                    
+                }
+                
             }
             
         </script>
